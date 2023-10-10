@@ -93,9 +93,9 @@
 ---
 ***
 # Recursos
-https://github.com/vachocalla/CourseM1CSharp
-https://code.visualstudio.com/download
-https://visualstudio.microsoft.com/es/vs/community/
+ - https://github.com/vachocalla/CourseM1CSharp
+ - https://code.visualstudio.com/download
+ - https://visualstudio.microsoft.com/es/vs/community/
 
 
 # C# Net Core 6 - Desde Cero (con GitHub) 
