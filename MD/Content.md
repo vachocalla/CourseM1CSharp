@@ -1,3 +1,11 @@
+# PRACTICAS REPASO
+ - Instalar Net Core.
+ - Instalar un Editor de Codigo (Visual Studio Code, Visual studio 2022).
+ - Crear un proyecto consola en net core.
+
+---
+---
+
 # MODULO1: C# Net Core 6 - Desde Cero (con GitHub) 
 ## Introduccion: 
 1. **.NET Framework**:
@@ -86,6 +94,8 @@
 ***
 # Recursos
 https://github.com/vachocalla/CourseM1CSharp
+https://code.visualstudio.com/download
+https://visualstudio.microsoft.com/es/vs/community/
 
 
 # C# Net Core 6 - Desde Cero (con GitHub) 
