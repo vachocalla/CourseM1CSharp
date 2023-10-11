@@ -1,0 +1,15 @@
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\bin\Debug\net7.0\OrientacionObjetos.exe
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\bin\Debug\net7.0\OrientacionObjetos.deps.json
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\bin\Debug\net7.0\OrientacionObjetos.runtimeconfig.json
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\bin\Debug\net7.0\OrientacionObjetos.dll
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\bin\Debug\net7.0\OrientacionObjetos.pdb
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.csproj.AssemblyReference.cache
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.GeneratedMSBuildEditorConfig.editorconfig
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.AssemblyInfoInputs.cache
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.AssemblyInfo.cs
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.csproj.CoreCompileInputs.cache
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.dll
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\refint\OrientacionObjetos.dll
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.pdb
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\OrientacionObjetos.genruntimeconfig.cache
+C:\Materias\C#\CourseM1CSharp\OrientacionObjetos\obj\Debug\net7.0\ref\OrientacionObjetos.dll

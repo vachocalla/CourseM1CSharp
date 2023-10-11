@@ -615,7 +615,7 @@ class Program
         // Imprimir información de la venta
         Console.WriteLine("Información de la Venta:");
         Console.WriteLine($"ID de Venta: {venta1.Id}");
-        Console.WriteLine($"Cliente: {venta1.Cliente.Nombre}");
+        Console.WriteLine($"Cliente: {venta1.cliente.Nombre}");
         Console.WriteLine("Productos:");
         foreach (var producto in venta1.Productos)
         {

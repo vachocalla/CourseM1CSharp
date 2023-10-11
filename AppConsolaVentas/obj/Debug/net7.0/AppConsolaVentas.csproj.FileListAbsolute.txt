@@ -1,0 +1,15 @@
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\bin\Debug\net7.0\AppConsolaVentas.exe
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\bin\Debug\net7.0\AppConsolaVentas.deps.json
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\bin\Debug\net7.0\AppConsolaVentas.runtimeconfig.json
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\bin\Debug\net7.0\AppConsolaVentas.dll
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\bin\Debug\net7.0\AppConsolaVentas.pdb
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.csproj.AssemblyReference.cache
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.GeneratedMSBuildEditorConfig.editorconfig
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.AssemblyInfoInputs.cache
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.AssemblyInfo.cs
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.csproj.CoreCompileInputs.cache
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.dll
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\refint\AppConsolaVentas.dll
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.pdb
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\AppConsolaVentas.genruntimeconfig.cache
+C:\Materias\C#\CourseM1CSharp\AppConsolaVentas\obj\Debug\net7.0\ref\AppConsolaVentas.dll
