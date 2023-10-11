@@ -99,6 +99,9 @@
  - https://git-scm.com/downloads
 
 # C# Net Core 6 - Desde Cero (con GitHub) 
+
+# Día 1
+
 ## Introduccion: 
 La diferencia principal entre ".NET Framework" y ".NET Core" se refiere a su diseño, propósito y compatibilidad. Aquí tienes una descripción de ambas:
 
@@ -314,6 +317,8 @@ public class Program
 }
 ```
 
+# Día 2
+
 ### Clases y Objetos
 La programación orientada a objetos (POO) es un paradigma de programación fundamental en C# y .NET Core 6. En la POO, los programas se organizan en objetos que representan entidades del mundo real y las interacciones entre ellos.
 
@@ -353,6 +358,21 @@ La programación orientada a objetos (POO) es un paradigma de programación fund
 3. **Encapsulamiento**:
    - El encapsulamiento es el principio de POO que implica ocultar los detalles internos de una clase y exponer solo las interfaces necesarias.
    - En C#, se utilizan modificadores de acceso como `public`, `private`, `protected`, etc., para controlar la visibilidad de atributos y métodos.
+
+        - **`public`**:
+            - Es el modificador de acceso más permisivo.
+            - Los miembros públicos son accesibles desde cualquier parte del código, tanto dentro como fuera de la clase en la que se definen.
+            - Es útil para los miembros que deben ser accesibles desde otras partes del programa, como interfaces públicas de una clase.
+
+        - **`private`**:
+            - Es el modificador de acceso más restrictivo.
+            - Los miembros privados solo son accesibles dentro de la propia clase en la que se definen.
+            - Se utiliza para ocultar la implementación interna de una clase y para evitar el acceso directo desde fuera de la clase.
+
+        - **`protected`**:
+            - Los miembros protegidos son similares a los miembros privados en el sentido de que no son accesibles desde fuera de la clase.
+            - Sin embargo, los miembros protegidos son accesibles en clases derivadas (subclases) de la clase en la que se definen.
+            - Se utiliza para permitir que las subclases hereden y utilicen ciertos miembros, pero aún así los oculta de otros códigos externos.   
 
    ```csharp
    public class CuentaBancaria
@@ -423,11 +443,196 @@ La programación orientada a objetos (POO) es un paradigma de programación fund
    - Se logra mediante la creación de clases abstractas e interfaces.
 
    ```csharp
-   public abstract class Forma
-   {
-       public abstract double CalcularArea();
-   }
-   ```
+    using System;
+
+    // Definición de una clase abstracta
+    abstract class Vehiculo
+    {
+        // Propiedades
+        public string Marca { get; set; }
+        public string Modelo { get; set; }
+
+        // Constructor
+        public Vehiculo(string marca, string modelo)
+        {
+            Marca = marca;
+            Modelo = modelo;
+        }
+
+        // Método abstracto que debe ser implementado por las clases derivadas
+        public abstract void Arrancar();
+
+        // Método común que no es abstracto
+        public void Detener()
+        {
+            Console.WriteLine("El vehículo se ha detenido.");
+        }
+    }
+
+    // Clase derivada que hereda de Vehiculo
+    class Coche : Vehiculo
+    {
+        public Coche(string marca, string modelo) : base(marca, modelo)
+        {
+        }
+
+        // Implementación del método abstracto
+        public override void Arrancar()
+        {
+            Console.WriteLine($"El coche {Marca} {Modelo} ha arrancado.");
+        }
+    }
+
+    // Clase derivada que hereda de Vehiculo
+    class Motocicleta : Vehiculo
+    {
+        public Motocicleta(string marca, string modelo) : base(marca, modelo)
+        {
+        }
+
+        // Implementación del método abstracto
+        public override void Arrancar()
+        {
+            Console.WriteLine($"La motocicleta {Marca} {Modelo} ha arrancado.");
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Coche coche = new Coche("Ford", "Focus");
+            Motocicleta moto = new Motocicleta("Honda", "CBR");
+
+            coche.Arrancar(); // Llama al método Arrancar de Coche
+            coche.Detener();  // Llama al método Detener de Vehiculo
+
+            moto.Arrancar();  // Llama al método Arrancar de Motocicleta
+            moto.Detener();   // Llama al método Detener de Vehiculo
+        }
+    }
+    ```
+
+## Ejemplo de una aplicacion consola para ventas.
+```csharp
+using System;
+using System.Collections.Generic;
+
+// Clase Cliente
+class Cliente
+{
+    // Propiedades
+    public int Id { get; set; }
+    public string Nombre { get; set; }
+    public string Email { get; set; }
+    public string Telefono { get; set; }
+
+    // Constructor
+    public Cliente(int id, string nombre, string email, string telefono)
+    {
+        Id = id;
+        Nombre = nombre;
+        Email = email;
+        Telefono = telefono;
+    }
+}
+
+// Clase Producto
+class Producto
+{
+    // Propiedades
+    public int Id { get; set; }
+    public string Nombre { get; set; }
+    public string Descripcion { get; set; }
+
+    // Constructor
+    public Producto(int id, string nombre, string descripcion)
+    {
+        Id = id;
+        Nombre = nombre;
+        Descripcion = descripcion;
+    }
+}
+
+// Clase Venta
+class Venta
+{
+    // Propiedades
+    public int Id { get; set; }
+    public Cliente Cliente { get; set; }
+    public List<Producto> Productos { get; set; }
+    public DateTime FechaVenta { get; set; }
+
+    // Constructor
+    public Venta(int id, Cliente cliente, List<Producto> productos, DateTime fechaVenta)
+    {
+        Id = id;
+        Cliente = cliente;
+        Productos = productos;
+        FechaVenta = fechaVenta;
+    }
+
+    // Método para calcular el total de la venta
+    public decimal CalcularTotal()
+    {
+        decimal total = 0;
+        foreach (var producto in Productos)
+        {
+            // Supongamos que cada producto tiene un precio (no se muestra aquí en la clase Producto)
+            total += ObtenerPrecioProducto(producto);
+        }
+        return total;
+    }
+
+    private decimal ObtenerPrecioProducto(Producto producto)
+    {
+        // Aquí podrías implementar lógica para obtener el precio del producto
+        // Puedes usar una base de datos o una lista de precios, por ejemplo.
+        // Por simplicidad, asumiremos que cada producto tiene un precio fijo.
+        return 10.0M; // Precio de ejemplo
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // Crear clientes
+        Cliente cliente1 = new Cliente(1, "Juan Perez", "juan@example.com", "123-456-7890");
+        Cliente cliente2 = new Cliente(2, "María Rodriguez", "maria@example.com", "987-654-3210");
+
+        // Crear productos
+        Producto producto1 = new Producto(101, "Producto A", "Descripción del Producto A");
+        Producto producto2 = new Producto(102, "Producto B", "Descripción del Producto B");
+
+        // Crear una venta
+        List<Producto> productosVenta1 = new List<Producto> { producto1, producto2 };
+        Venta venta1 = new Venta(1001, cliente1, productosVenta1, DateTime.Now);
+
+        // Calcular el total de la venta
+        decimal totalVenta1 = venta1.CalcularTotal();
+
+        // Imprimir información de la venta
+        Console.WriteLine("Información de la Venta:");
+        Console.WriteLine($"ID de Venta: {venta1.Id}");
+        Console.WriteLine($"Cliente: {venta1.Cliente.Nombre}");
+        Console.WriteLine("Productos:");
+        foreach (var producto in venta1.Productos)
+        {
+            Console.WriteLine($"- {producto.Nombre}: {ObtenerPrecioProducto(producto):C}");
+        }
+        Console.WriteLine($"Total de la Venta: {totalVenta1:C}");
+    }
+
+    private static decimal ObtenerPrecioProducto(Producto producto)
+    {
+        // Aquí podrías implementar la lógica real para obtener el precio del producto.
+        // En este ejemplo, se usa un precio fijo.
+        return 10.0M; // Precio de ejemplo
+    }
+}
+```
+
 
 ### Diseño de Aplicaciones de Consola
 En C# con .NET Core, puedes crear diferentes tipos de aplicaciones de consola según tus necesidades y requisitos específicos. Aquí hay algunos tipos comunes de aplicaciones de consola que puedes desarrollar:
@@ -494,6 +699,7 @@ En C#, una biblioteca de clases (Class Library en inglés) es un proyecto que co
 4. Puedes distribuir el ensamblado a otros proyectos o desarrolladores según sea necesario.
 
 Las bibliotecas de clases son una parte fundamental de la arquitectura de software en C# y se utilizan ampliamente para crear componentes reutilizables y fáciles de mantener.
+
 
 ### Diseño de Aplicaciones Windows (Windows Forms)
 Aplicacion Practica: Proyecto completo de un Sistema de Ventas.
