@@ -1,37 +1,36 @@
 public class Venta
 {
     // Propiedades
-    public int Id { get; set; }
+    public long id { get; set; }
     public Cliente cliente { get; set; }
-    public List<Producto> Productos { get; set; }
-    public DateTime FechaVenta { get; set; }
+    public List<CompraProducto> compraProductos { get; set; }
+    public DateTime fechaVenta { get; set; }
 
     // Constructor
-    public Venta(int id, Cliente _cliente, List<Producto> productos, DateTime fechaVenta)
+    public Venta(
+        /*long ventaId, */
+        Cliente ventaCliente, 
+        List<CompraProducto> ventaCompraProductos, 
+        DateTime ventaFechaVenta)
     {
-        Id = id;
-        cliente = _cliente;
-        Productos = productos;
-        FechaVenta = fechaVenta;
+        //id = ventaId;
+        id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+        cliente = ventaCliente;
+        compraProductos = ventaCompraProductos;
+        fechaVenta = ventaFechaVenta;
     }
 
-    // Método para calcular el total de la venta
-    public decimal CalcularTotal()
+    public void mostrarDetalleVenta()
     {
+        Console.WriteLine($"Cliente: {cliente.nombre}");
+        Console.WriteLine($"Productos Comprados:");
         decimal total = 0;
-        foreach (var producto in Productos)
+        foreach (var compraProducto in compraProductos)
         {
-            // Supongamos que cada producto tiene un precio (no se muestra aquí en la clase Producto)
-            total += ObtenerPrecioProducto(producto);
+            Console.WriteLine($"\t {compraProducto.toString()}");
+            total = total + compraProducto.costoCompra();
         }
-        return total;
+        Console.WriteLine($"Total Compra: {total}");
     }
 
-    private decimal ObtenerPrecioProducto(Producto producto)
-    {
-        // Aquí podrías implementar lógica para obtener el precio del producto
-        // Puedes usar una base de datos o una lista de precios, por ejemplo.
-        // Por simplicidad, asumiremos que cada producto tiene un precio fijo.
-        return 10.0M; // Precio de ejemplo
-    }
 }

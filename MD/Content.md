@@ -633,6 +633,335 @@ class Program
 }
 ```
 
+# Día 3
+### Mejora de Clases: Aplicacion Ventas
+![Alt text](image.png)
+ - Clase Cliente
+    ```csharp
+    public class Cliente
+    {
+        // Propiedades
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string email { get; set; }
+        public string telefono { get; set; }
+
+        // Constructor
+        public Cliente(){}
+        public Cliente(
+            /*long clienteId, */
+            string clienteNombre, 
+            string clienteEmail, 
+            string clienteTelefono)
+        {
+            //id = clienteId;
+            id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            nombre = clienteNombre;
+            email = clienteEmail;
+            telefono = clienteTelefono;
+        }
+        public string toString(){
+            //Console.WriteLine($"{id}\t{nombre}\t{email}\t{telefono}");
+            return $"{id}\t{nombre}\t{email}\t{telefono}";
+        }
+
+        public void leer(){
+            //id = System.CurrentMilliseconds.
+            Console.WriteLine("INGRESAR CLIENTE:");
+            //Console.Write("Id:");
+            //id = long.Parse(Console.ReadLine());
+            id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Email:");
+            email = Console.ReadLine();
+            Console.Write("Telefono:");
+            telefono = Console.ReadLine();
+        }
+    }
+    ```
+
+ - Clase Producto
+    ```csharp
+    public class Producto
+    {
+        // Propiedades
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string descripcion { get; set; }
+        public decimal precio { get; set; }
+
+        // Constructor
+        public Producto(){
+        }
+        public Producto(
+            /*long productoId, */
+            string productoNombre, 
+            string productoDescripcion, 
+            decimal productoPrecio)
+        {
+            //id = productoId;
+            id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            nombre = productoNombre;
+            descripcion = productoDescripcion;
+            precio = productoPrecio;
+        }
+
+        public string toString(){
+            return $"{id}\t{nombre}\t{descripcion}\t{precio}";
+        }
+
+        public void leer(){
+            //id = System.CurrentMilliseconds.
+            Console.WriteLine("INGRESE PRODUCTO:");
+            //Console.Write("Id:");
+            //id = long.Parse(Console.ReadLine());
+            id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Descripcion:");
+            descripcion = Console.ReadLine();
+            Console.Write("Precio:");
+            precio = decimal.Parse(Console.ReadLine());
+        }
+    }
+    ```
+
+ - Clase CompraProducto
+    ```csharp
+    public class CompraProducto
+    {
+        // Propiedades
+        public long id { get; set; }
+        public Producto producto { get; set; }
+        public int cantidad { get; set; }
+
+        // Constructor
+        public CompraProducto(
+            /*long compraProductoId, */
+            Producto compraProductoProducto, 
+            int compraProductoCantidad)
+        {
+            //id = compraProductoId;
+            id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            producto = compraProductoProducto;
+            cantidad = compraProductoCantidad;
+        }
+
+        public decimal costoCompra(){
+            return producto.precio * cantidad;
+        }
+
+        public string toString(){
+            return $"{id} \t{producto.nombre} \t{producto.precio} \t{cantidad} \t{costoCompra()}";
+        }
+    }
+    ```
+ - Clase Venta
+    ```csharp
+    public class Venta
+    {
+        // Propiedades
+        public long id { get; set; }
+        public Cliente cliente { get; set; }
+        public List<CompraProducto> compraProductos { get; set; }
+        public DateTime fechaVenta { get; set; }
+
+        // Constructor
+        public Venta(
+            /*long ventaId, */
+            Cliente ventaCliente, 
+            List<CompraProducto> ventaCompraProductos, 
+            DateTime ventaFechaVenta)
+        {
+            //id = ventaId;
+            id = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            cliente = ventaCliente;
+            compraProductos = ventaCompraProductos;
+            fechaVenta = ventaFechaVenta;
+        }
+
+        public void mostrarDetalleVenta()
+        {
+            Console.WriteLine($"Cliente: {cliente.nombre}");
+            Console.WriteLine($"Productos Comprados:");
+            decimal total = 0;
+            foreach (var compraProducto in compraProductos)
+            {
+                Console.WriteLine($"\t {compraProducto.toString()}");
+                total = total + compraProducto.costoCompra();
+            }
+            Console.WriteLine($"Total Compra: {total}");
+        }
+
+    }
+    ```
+ - Clase Principal Program
+    ```csharp
+    public class Program
+    {
+        public static List<Cliente> clientes = new List<Cliente>();
+        public static List<Producto> productos = new List<Producto>();
+        public static List<Venta> ventas = new List<Venta>();
+        public static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("\n\nMENU \n Seleccione una opción:");
+                Console.WriteLine("1. Registrar Cliente");
+                Console.WriteLine("2. Mostrar Clientes");
+                Console.WriteLine("3. Registrar Producto");
+                Console.WriteLine("4. Mostrar Productos");
+                Console.WriteLine("5. Realizar Compra/Venta");
+                Console.WriteLine("6. Mostrar Ventas");
+                Console.WriteLine("0. Salir");
+
+                int opcion;
+                if (int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            Cliente c1 = new Cliente();
+                            c1.leer();
+                            clientes.Add(c1);
+                            break;
+                        case 2:
+                            mostrarClientes();
+                            break;
+                        case 3:
+                            Producto p1 = new Producto();
+                            p1.leer();
+                            productos.Add(p1);
+                            break;
+                        case 4:
+                            mostrarProductos();
+                            break;
+                        case 5:
+                            compraVenta();
+                            break;
+                        case 6:
+                            mostrarVentas();
+                            break;
+                        case 0:
+                            return; // Salir del programa
+                        default:
+                            Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                }
+            }
+        }
+
+        public static void mostrarClientes(){
+            Console.WriteLine( "\nCLIENTES" );
+            Console.WriteLine( "No\tId\t\tNombre\tEmail\tTelefono" );
+            var index = 1;
+            foreach (var cliente in clientes) {
+                Console.WriteLine( $"{index} \t{cliente.toString()}" );
+                index++;
+            }
+        }
+        public static void mostrarProductos(){
+            Console.WriteLine( "\nPRODUCTOS" );
+            Console.WriteLine( "No\tId\t\tNombre\tDescripcion\tPrecio" );
+            var index = 1;
+            foreach (var producto in productos) {
+                Console.WriteLine( $"{index} \t{producto.toString()}" );
+                index++;
+            }
+        }
+        public static void compraVenta(){
+            Console.WriteLine("\nCOMPRA VENTA");
+            mostrarClientes();
+            Console.Write("Seleccione el No de Persona que Compra:");
+            int noCliente = int.Parse( Console.ReadLine() ) ;
+            Cliente cliente = clientes[noCliente-1];
+            List<CompraProducto> compraProductos = new List<CompraProducto>();
+
+            while (true)
+            {
+                Console.WriteLine("\n\nMENU \n Seleccione una opción:");
+                Console.WriteLine("1. Agregar Producto a Comprar");
+                Console.WriteLine("0. Compra Compleda");
+
+                int opcion;
+                if (int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            Console.WriteLine("\nCOMPRA VENTA");
+                            mostrarProductos();
+                            Console.Write("Seleccione el No de Producto a Comprar:");
+                            int noProducto = int.Parse( Console.ReadLine() ) ;
+                            Console.Write("Ingrese Cantidad a Comprar:");
+                            int cantidad = int.Parse( Console.ReadLine() ) ;
+                            CompraProducto cp = new CompraProducto(productos[noProducto-1], cantidad);
+                            compraProductos.Add( cp );
+                            break;
+                        //case 0:
+                        //    return; // Salir del programa
+                        default:
+                            Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                }
+                if(opcion==0){
+                    break;
+                }
+            }
+
+            Venta venta = new Venta( cliente,compraProductos, DateTime.Now);
+            ventas.Add(venta);
+        }
+
+        public static void mostrarVentas(){
+            Console.WriteLine( "\nTODAS LAS VENTAS" );
+            foreach (var venta in ventas) {
+                venta.mostrarDetalleVenta();
+            }
+        }
+        
+    }
+    ```
+![Alt text](image-1.png)
+
+![Alt text](image-2.png)
+
+![Alt text](image-3.png)
+
+![Alt text](image-4.png)
+
+![Alt text](image-5.png)
+
+![Alt text](image-6.png)
+
+#### Compra Venta de productos
+
+![Alt text](image-7.png)
+
+![Alt text](image-8.png)
+
+![Alt text](image-9.png)
+
+![Alt text](image-10.png)
+
+![Alt text](image-11.png)
+
+
+### Implementacion de Menu: Aplicacion Ventas
+
+### Refactorizacion de Codigo con Libreria de Clases
+
 
 ### Diseño de Aplicaciones de Consola
 En C# con .NET Core, puedes crear diferentes tipos de aplicaciones de consola según tus necesidades y requisitos específicos. Aquí hay algunos tipos comunes de aplicaciones de consola que puedes desarrollar:
