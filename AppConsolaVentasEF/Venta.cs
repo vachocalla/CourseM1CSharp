@@ -12,7 +12,7 @@ public class Venta
 
     public void mostrarDetalleVenta()
     {
-        Console.WriteLine($"Cliente: {cliente.nombre}");
+        /*Console.WriteLine($"Cliente: {cliente.nombre}");
         Console.WriteLine($"Productos Comprados:");
         decimal total = 0;
         foreach (var compraProducto in compraProductos)
@@ -20,7 +20,7 @@ public class Venta
             Console.WriteLine($"\t {compraProducto.toString()}");
             total = total + compraProducto.costoCompra();
         }
-        Console.WriteLine($"Total Compra: {total}");
+        Console.WriteLine($"Total Compra: {total}");*/
     }
 
 }

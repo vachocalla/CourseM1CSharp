@@ -1,6 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 //Console.WriteLine("Hello, World!");
 
+using Microsoft.EntityFrameworkCore;
+
 public class Program{
     public static void Main(string[] args){
         using var context = new ApplicationDbContext();
@@ -142,11 +144,25 @@ public class Program{
 
     public static void mostrarVentas(ApplicationDbContext context){
         Console.WriteLine( "\nTODAS LAS VENTAS" );
-        var ventas = context.Ventas.ToList();
+        var ventas = context.Ventas.Where(v => true).Include(v => v.cliente).Include(v => v.compraProductos  ).ToList();
         
         foreach (var venta in ventas) {
-            venta.mostrarDetalleVenta();
+            Cliente cliente = venta.cliente;
+            Console.WriteLine($"Cliente: {cliente.nombre}");
+            Console.WriteLine($"Productos Comprados:");
+            List<CompraProducto> compraProductos = venta.compraProductos;
+            
+            decimal total = 0;
+            foreach (var compraProducto in compraProductos)
+            {
+                var cp = context.CompraProductos.Where(x => x.id == compraProducto.id ).Include(x=>x.producto).FirstOrDefault();
+                Console.WriteLine($"\t {compraProducto.toString()}");
+                total = total + compraProducto.costoCompra();
+            }
+            Console.WriteLine($"Total Compra: {total}");
         }
+
+
     }
 }
 
