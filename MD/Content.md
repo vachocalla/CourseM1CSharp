@@ -958,9 +958,386 @@ class Program
 ![Alt text](image-11.png)
 
 
-### Implementacion de Menu: Aplicacion Ventas
+# Día 4 
+### Implementacion: Aplicacion Ventas con Entity Framework
+
+
+
+Para crear una aplicacion de Ventas en consola en C# .NET 6, agregar Entity Framework y generar el contexto de Entity Framework mediante los siguientes pasps:
+
+**Paso 1: Crear un Proyecto de Consola**
+
+1. Abre tu terminal o línea de comandos.
+
+2. Navega al directorio donde desees crear el proyecto de consola.
+
+3. Ejecuta el siguiente comando para crear un nuevo proyecto de consola:
+
+   ```bash
+   dotnet new console -n AppConsolaVentasEF
+   ```
+
+   Esto creará un proyecto de consola llamado "AppConsolaVentasEF".
+
+**Paso 2: Agregar Entity Framework Core**
+
+1. Navega al directorio del proyecto recién creado:
+
+   ```bash
+   cd MiProyectoDeConsola
+   ```
+
+2. Agrega el paquete Entity Framework Core para SQL Server a tu proyecto con el siguiente comando:
+
+   ```bash
+   dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+   dotnet add package Microsoft.EntityFrameworkCore.Design
+   dotnet add package Microsoft.EntityFrameworkCore
+   dotnet add package Microsoft.EntityFrameworkCore.Tools
+   ```
+
+**Paso 3: Definir los Modelos de Datos**
+
+1. Define las clases que representarán tus modelos de datos Segun la IMagen. crear clases como `Cliente`, `Producto`, `CompraProducto`, `Venta`., con propiedades que mapeen las columnas de tus tablas en la base de datos.
+![Alt text](image-12.png)
+    ```csharp
+   using System;
+    using System.ComponentModel.DataAnnotations;
+
+    public class Cliente
+    {
+        // Propiedades
+        [Key]
+        public long id { get; set; }
+        public string? nombre { get; set; }
+        public string? email { get; set; }
+        public string? telefono { get; set; }
+
+        public string toString(){
+            return $"{id}\t{nombre}\t{email}\t{telefono}";
+        }
+
+        public void leer(){
+            Console.WriteLine("INGRESAR CLIENTE:");
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Email:");
+            email = Console.ReadLine();
+            Console.Write("Telefono:");
+            telefono = Console.ReadLine();
+        }
+    }
+   ```
+
+   ```csharp   
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    public class Producto
+    {
+        [Key]
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string descripcion { get; set; }
+        public decimal precio { get; set; }
+
+        public string toString(){
+            return $"{id}\t{nombre}\t{descripcion}\t{precio}";
+        }
+
+        public void leer(){
+            Console.WriteLine("INGRESE PRODUCTO:");
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Descripcion:");
+            descripcion = Console.ReadLine();
+            Console.Write("Precio:");
+            precio = decimal.Parse(Console.ReadLine());
+        }
+    }
+   ```
+
+   ```csharp   
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    public class CompraProducto
+    {
+        [Key]
+        public long id { get; set; }
+        public Producto producto { get; set; }
+        public int cantidad { get; set; }
+
+        public decimal costoCompra(){
+            return producto.precio * cantidad;
+        }
+
+        public string toString(){
+            return $"{id} \t{producto.nombre} \t{producto.precio} \t{cantidad} \t{costoCompra()}";
+        }
+    }
+   ```
+
+   ```csharp   
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    public class Venta
+    {
+        [Key]
+        public long id { get; set; }
+        public Cliente cliente { get; set; }
+        public List<CompraProducto> compraProductos { get; set; }
+        public DateTime fechaVenta { get; set; }
+
+        public void mostrarDetalleVenta()
+        {
+            Console.WriteLine($"Cliente: {cliente.nombre}");
+            Console.WriteLine($"Productos Comprados:");
+            decimal total = 0;
+            foreach (var compraProducto in compraProductos)
+            {
+                Console.WriteLine($"\t {compraProducto.toString()}");
+                total = total + compraProducto.costoCompra();
+            }
+            Console.WriteLine($"Total Compra: {total}");
+        }
+
+    }
+   ```
+
+**Paso 4: Crear el Contexto de Entity Framework**
+
+1. Crea una clase que herede de `DbContext` para definir el contexto de Entity Framework. Añade esta clase al proyecto. Por ejemplo, puedes llamarla `ApplicationDbContext`.
+
+   ```csharp   
+    using Microsoft.EntityFrameworkCore;
+    public class ApplicationDbContext : DbContext{
+        public DbSet<Cliente> Clientes {get; set;}
+        public DbSet<Producto> Productos {get; set;}
+        public DbSet<CompraProducto> CompraProductos {get; set;}
+        public DbSet<Venta> Ventas {get; set;}
+    }
+   ```
+
+   Asegúrate de agregar las propiedades `DbSet` para cada uno de tus modelos.
+
+**Paso 5: Configurar la Cadena de Conexión**
+
+1. En la clase `ApplicationDbContext`, sobreescribe el método `OnConfiguring` para configurar la cadena de conexión a tu base de datos SQL Server. Reemplaza `"TuCadenaDeConexion"` con la cadena de conexión adecuada.
+
+    - Server=Local; 
+    - Database=Nombre de La Base de datos;
+    - Integrated Security=True; 
+    - Encrypt=false;
+
+   ```csharp
+   protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder ){
+        if( !optionsBuilder.IsConfigured ){
+            optionsBuilder.UseSqlServer("Server=LAPTOP-A7F9UEK5\\SQLEXPRESS; Database=AppConVentasEF; Integrated Security=True; Encrypt=false;");
+        }
+    }
+   ```
+
+**Paso 5.5: Instalacion dotnet ef**
+
+1. Abre una terminal en la ubicación de tu proyecto y ejecuta el siguiente:
+
+   ```bash
+   dotnet tool install --global dotnet-ef
+   ```
+
+   Esto instalara la herramienta en el sistema.
+
+**Paso 6: Generar las Migraciones**
+
+1. Abre una terminal en la ubicación de tu proyecto y ejecuta el siguiente comando para generar una migración inicial:
+
+   ```bash
+   dotnet ef migrations add Inicial
+   ```
+
+   Esto generará una migración inicial basada en tus modelos.
+
+**Paso 7: Aplicar las Migraciones a la Base de Datos**
+
+1. Ejecuta el siguiente comando para aplicar las migraciones a la base de datos:
+
+   ```bash
+   dotnet ef database update
+   ```
+
+   Esto creará la base de datos según las migraciones que hayas definido.
+
+**Paso 8: Usar el Contexto de Entity Framework**
+
+1. En tu programa principal (en el archivo `Program.cs`), crea una instancia del contexto de Entity Framework y úsala para interactuar con la base de datos y aplicarla a un menu de interacccion.
+
+    ```csharp
+    public class Program{
+        public static void Main(string[] args){
+            using var context = new ApplicationDbContext();
+            
+            while (true)
+            {
+                Console.WriteLine("\n\nMENU \n Seleccione una opción:");
+                Console.WriteLine("1. Registrar Cliente");
+                Console.WriteLine("2. Mostrar Clientes");
+                Console.WriteLine("3. Registrar Producto");
+                Console.WriteLine("4. Mostrar Productos");
+                Console.WriteLine("5. Realizar Compra/Venta");
+                Console.WriteLine("6. Mostrar Ventas");
+                Console.WriteLine("0. Salir");
+
+                int opcion;
+                if (int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            Cliente c1 = new Cliente();
+                            c1.leer();
+                            context.Clientes.Add( c1 );
+                            context.SaveChanges();
+                            break;
+                        case 2:
+                            mostrarClientes(context);
+                            break;
+                        case 3:
+                            Producto p1 = new Producto();
+                            p1.leer();
+                            context.Productos.Add( p1 );
+                            context.SaveChanges();
+                            break;
+                        case 4:
+                            mostrarProductos(context);
+                            break;
+                        case 5:
+                            compraVenta(context);
+                            break;
+                        case 6:
+                            mostrarVentas(context);
+                            break;
+                        case 0:
+                            return; // Salir del programa
+                        default:
+                            Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                }
+            }
+
+        }
+
+        public static void mostrarClientes( ApplicationDbContext context ){
+            Console.WriteLine( "\nCLIENTES" );
+            Console.WriteLine( "No\tId\t\tNombre\tEmail\tTelefono" );
+            var clientes = context.Clientes.ToList();
+            foreach (var cliente in clientes) {
+                Console.WriteLine( $"{cliente.toString()}" );
+            }
+        }
+
+        public static void mostrarProductos( ApplicationDbContext context ){
+            Console.WriteLine( "\nPRODUCTOS" );
+            Console.WriteLine( "No\tId\t\tNombre\tDescripcion\tPrecio" );
+            var productos = context.Productos.ToList();
+            foreach (var producto in productos) {
+                Console.WriteLine( $"{producto.toString()}" );
+            }
+        }
+        public static void compraVenta(ApplicationDbContext context){
+            Console.WriteLine("\nCOMPRA VENTA");
+            mostrarClientes(context);
+            Console.Write("Seleccione el No de Persona que Compra:");
+            long noCliente = long.Parse( Console.ReadLine() ) ;
+            Cliente cliente = context.Clientes.FirstOrDefault( x => x.id==noCliente );
+            List<CompraProducto> compraProductos = new List<CompraProducto>();
+
+            while (true)
+            {
+                Console.WriteLine("\n\nMENU \n Seleccione una opción:");
+                Console.WriteLine("1. Agregar Producto a Comprar");
+                Console.WriteLine("0. Compra Compleda");
+
+                int opcion;
+                if (int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            Console.WriteLine("\nCOMPRA VENTA");
+                            mostrarProductos( context );
+                            Console.Write("Seleccione el No de Producto a Comprar:");
+                            long noProducto = long.Parse( Console.ReadLine() ) ;
+                            Producto producto = context.Productos.FirstOrDefault( x => x.id==noProducto );
+                            Console.Write("Ingrese Cantidad a Comprar:");
+                            int cantidad = int.Parse( Console.ReadLine() ) ;
+                            CompraProducto cp = new CompraProducto{
+                                producto=producto , 
+                                cantidad=cantidad
+                            };
+                            compraProductos.Add( cp );
+                            break;
+                        //case 0:
+                        //    return; // Salir del programa
+                        default:
+                            Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                }
+                if(opcion==0){
+                    break;
+                }
+            }
+
+            foreach (var cps in compraProductos) {
+                context.CompraProductos.Add(cps);
+                context.SaveChanges();
+            }
+
+            Venta venta = new Venta{
+                cliente=cliente,
+                compraProductos=compraProductos,
+                fechaVenta=DateTime.Now
+            };
+            context.Ventas.Add(venta);
+            context.SaveChanges();
+        }
+
+        public static void mostrarVentas(ApplicationDbContext context){
+            Console.WriteLine( "\nTODAS LAS VENTAS" );
+            var ventas = context.Ventas.ToList();
+            
+            foreach (var venta in ventas) {
+                venta.mostrarDetalleVenta();
+            }
+        }
+    }
+    ```
+
+**Paso 9: Hacer correo la aplicacion**
+
+1. Ejecuta el siguiente comando para aplicar las migraciones a la base de datos:
+
+   ```bash
+   dotnet run
+   ```
+
+   Esto creará la base de datos según las migraciones que hayas definido.
+
+# ----------------------------------------------
 
 ### Refactorizacion de Codigo con Libreria de Clases
+
+
 
 
 ### Diseño de Aplicaciones de Consola
