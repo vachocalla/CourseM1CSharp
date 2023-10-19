@@ -1,0 +1,14 @@
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\bin\Debug\net7.0\VentasCore.deps.json
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\bin\Debug\net7.0\VentasCore.runtimeconfig.json
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\bin\Debug\net7.0\VentasCore.dll
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\bin\Debug\net7.0\VentasCore.pdb
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.csproj.AssemblyReference.cache
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.AssemblyInfoInputs.cache
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.AssemblyInfo.cs
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.csproj.CoreCompileInputs.cache
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.dll
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\refint\VentasCore.dll
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.pdb
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\VentasCore.genruntimeconfig.cache
+C:\Materias\C#\CourseM1CSharp\AplicacionConBibliotecaClases\VentasCore\obj\Debug\net7.0\ref\VentasCore.dll

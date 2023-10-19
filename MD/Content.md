@@ -959,7 +959,7 @@ class Program
 
 
 # Día 4 
-### Implementacion: Aplicacion Ventas con Entity Framework
+## Implementacion: Aplicacion Ventas con Entity Framework
 
 
 
@@ -1332,6 +1332,595 @@ Para crear una aplicacion de Ventas en consola en C# .NET 6, agregar Entity Fram
    ```
 
    Esto creará la base de datos según las migraciones que hayas definido.
+
+# Día 5 
+## Biblioteca de Clases: Modularizacion de funcionalidades con Biblioteca de Clases, Entity Framework y Aplicacion de Consola Separada
+
+### Crear la Biblioteca de clases "VentasCore"
+
+**Paso 0: Crear un Proyecto de Consola**
+
+1. Abre tu terminal o línea de comandos.
+
+2. Navega al directorio donde desees trabajar.
+
+3. Crea un directotio para agrupas todos los proyectos Net Core ejecutando los siguintes comandos:
+
+   ```bash
+   mkdir AplicacionConBibliotecaClases
+   ```
+4. Ingresar al directorio con el comando:
+   ```bash
+   cd AplicacionConBibliotecaClases
+   ```
+
+Para crear una biblioteca de clases en C# utilizando `dotnet new classlib` y luego referenciarla en un proyecto, puedes seguir estos pasos:
+
+**Paso 1: Crear una biblioteca de clases**
+
+1. Abre una terminal o línea de comandos.
+
+2. Navega al directorio donde deseas crear la biblioteca de clases.
+
+3. Ejecuta el siguiente comando para crear una biblioteca de clases con `dotnet new classlib`:
+
+   ```shell
+   dotnet new classlib -n VentasCore
+   ```
+
+   En este ejemplo, se crea una biblioteca de clases llamada "VentasCore".
+
+**Paso 2: Agregar código a la biblioteca de clases**
+
+1. Abre el directorio recién creado para tu biblioteca de clases en tu entorno de desarrollo favorito. Puedes usar Visual Studio Code, Visual Studio u otro editor de código.
+
+2. Agrega tus clases y lógica a la biblioteca de clases según tus necesidades.
+
+**Paso 2.1: Instalar Entity Framework en la Biblioteca de Clases**
+
+1. Agrega el paquete Entity Framework Core para SQL Server a tu proyecto con el siguiente comando:
+
+   ```bash
+   dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+   dotnet add package Microsoft.EntityFrameworkCore.Design
+   dotnet add package Microsoft.EntityFrameworkCore
+   dotnet add package Microsoft.EntityFrameworkCore.Tools
+   ```
+
+**Paso 2.2: Definir los Modelos de Datos**
+
+1. Define las clases que representarán tus modelos de datos. Por ejemplo, puedes crear clases como `Cliente`, etc., con propiedades que mapeen las columnas de tus tablas en la base de datos (Esta clase podemos copiarlo directamente desde el proyecto anterior).
+    ```csharp
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    namespace VentasCore;
+    public class Cliente
+    {
+        // Propiedades
+        [Key]
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string email { get; set; }
+        public string telefono { get; set; }
+
+        public string toString(){
+            return $"{id}\t{nombre}\t{email}\t{telefono}";
+        }
+
+        public void leer(){
+            Console.WriteLine("INGRESAR CLIENTE:");
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Email:");
+            email = Console.ReadLine();
+            Console.Write("Telefono:");
+            telefono = Console.ReadLine();
+        }
+    }
+    ```
+
+**Paso 2.3: Crear el Contexto de Entity Framework**
+
+1. Crea una clase que herede de `DbContext` para definir el contexto de Entity Framework. Añade esta clase al proyecto. Por ejemplo, puedes llamarla `ApplicationDbContext` (Podemos copiarlo desde un proyecto anterior).
+
+   ```csharp
+    using Microsoft.EntityFrameworkCore;
+
+    namespace VentasCore;
+    public class ApplicationDbContext : DbContext{
+        public DbSet<Cliente> Clientes {get; set;}
+        /*public DbSet<Producto> Productos {get; set;}
+        public DbSet<CompraProducto> CompraProductos {get; set;}
+        public DbSet<Venta> Ventas {get; set;}*/
+        
+
+        protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder ){
+            if( !optionsBuilder.IsConfigured ){
+                optionsBuilder.UseSqlServer("Server=LAPTOP-A7F9UEK5\\SQLEXPRESS; Database=AppConVentasEFBiblioteca; Integrated Security=True; Encrypt=false;");
+            }
+        }
+    }
+   ```
+
+   Asegúrate de agregar las propiedades `DbSet` para cada uno de tus modelos.
+
+**Paso 2.4: Crear la base de datos en SQL Server**
+
+1. Abre SqlServer Managemente Studio, ingresa son tu usuario, crea un base de datos llamada: `AppConVentasEFBiblioteca` como se ve en la imagen:
+
+    ![Alt text](image-15.png)
+
+**Paso 2.5: Generar las Migraciones**
+
+1. Abre una terminal en la ubicación de tu proyecto y ejecuta el siguiente comando para generar una migración inicial:
+
+   ```bash
+   dotnet ef migrations add Inicial
+   ```
+
+   Esto generará una migración inicial basada en tus modelos.
+
+**Paso 2.6: Aplicar las Migraciones a la Base de Datos**
+
+1. Ejecuta el siguiente comando para aplicar las migraciones a la base de datos:
+
+   ```bash
+   dotnet ef database update
+   ```
+
+   Esto creará la base de datos según las migraciones que hayas definido.
+   ![Alt text](image-14.png)
+
+
+**Paso 3: Compilar la biblioteca de clases**
+
+1. En la terminal, navega al directorio de la biblioteca de clases.
+
+2. Ejecuta el siguiente comando para compilar la biblioteca de clases:
+
+   ```shell
+   dotnet build
+   ```
+
+   Esto compilará la biblioteca y generará el ensamblado (archivo DLL) en el directorio de salida.
+
+**Paso 4: Referenciar la biblioteca de clases en un proyecto**
+
+1. Ahora esta biblioteca de clases podemos referenciarla desde otro proyecto y procederemos a realizarlo en la siguiente seccion.
+
+### Crear un aplicacion Consola "VentasConsole" para referenciar la Biblioteca de clases "VentasCore"
+
+**Paso 1: Crear un Proyecto de Consola**
+
+1. Abre tu terminal o línea de comandos.
+
+2. Navega al directorio donde desees crear el proyecto de consola en este caso el directorio debe ser "AplicacionConBibliotecaClases".
+
+3. Ejecuta el siguiente comando para crear un nuevo proyecto de consola:
+
+   ```bash
+   dotnet new console -n VentasConsole
+   ```
+
+   Esto creará un proyecto de consola llamado "VentasConsole".
+
+   Junto al la biblioteca de clases debe verse de la siguiente manera:
+    ![Alt text](image-13.png)
+
+**Paso 2: Ir a la ruta del proyecto**
+
+1. Navega al directorio del proyecto recién creado:
+
+   ```bash
+   cd VentasConsole
+   ```
+
+**Paso 3: Referenciar la biblioteca de clases "VentasCore" en el proyecto "VentasConsole"**
+
+1. Ejecuta el siguiente comando para agregar una referencia a la biblioteca de clases:
+
+   ```shell
+   dotnet add reference ../VentasCore/VentasCore.csproj
+   ```
+
+   Asegúrate de ajustar la ruta según la ubicación de tu biblioteca de clases.
+
+**Paso 4: Utilizar clases de la biblioteca**
+
+1. Ahora puedes utilizar las clases y la funcionalidad de la biblioteca de clases en tu proyecto. Asegúrate de importar los espacios de nombres necesarios `using VentasCore;`.
+
+2. En la clase `Program.cs` ahora podemos usar la biblioteca de clases como ser ve a continuacion.
+
+   ```csharp
+   using VentasCore;
+
+    public class Program{
+        public static void Main(string[] args){
+            using var context = new ApplicationDbContext();
+            var cliente1 = new Cliente{
+                nombre = "Juan Perez",
+                email = "juan@juan",
+                telefono = "123",
+            };
+            context.Clientes.Add( cliente1 );
+            context.SaveChanges();
+
+            Console.WriteLine("Finalizado");   
+        }        
+    }
+   ```
+
+**Paso 5: Ejecuta la Aplicación de Consola**
+
+1. Ahora puedes compilar y ejecutar la aplicación de consola utilizando el siguiente comando:
+
+    ```bash
+    dotnet run
+    ```
+2. En la consola solo mostara un mensaje "Finalizado".
+
+3. En la base de datos validar que se haya creado el cliente "Juan Perez" como se ve en la imagen:
+    ![Alt text](image-16.png)
+
+**Paso 6: El proyecto se completara en la siguiente session**
+
+# Dia 6
+## CONTINUACION: Biblioteca de Clases: Modularizacion de funcionalidades con Biblioteca de Clases, Entity Framework y Aplicacion de Consola Separada
+
+**Paso 0: Ir al proyecto "VentasCore"**
+
+**Paso 1: Actualizar los Modelos de Datos restante: Producto, CompraProducto, Venta**
+
+1. Define o actualizar las clases que representarán tus modelos de datos. Por ejemplo, puedes crear clases como `Cliente`,`Producto`, `CompraProducto`, `Venta`, etc y agregar el espacion de nombres `namespace VentasCore;`, con propiedades que mapeen las columnas de tus tablas en la base de datos (Esta clase podemos copiarlo directamente desde el proyecto anterior).
+    ```csharp
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    namespace VentasCore;
+    public class Cliente
+    {
+        // Propiedades
+        [Key]
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string email { get; set; }
+        public string telefono { get; set; }
+
+        public string toString(){
+            return $"{id}\t{nombre}\t{email}\t{telefono}";
+        }
+
+        public void leer(){
+            Console.WriteLine("INGRESAR CLIENTE:");
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Email:");
+            email = Console.ReadLine();
+            Console.Write("Telefono:");
+            telefono = Console.ReadLine();
+        }
+
+        public static void registrarCliente( ApplicationDbContext context ){
+            Cliente c1 = new Cliente();
+            c1.leer();
+            context.Clientes.Add( c1 );
+            context.SaveChanges();
+        }
+
+        public static void mostrarClientes( ApplicationDbContext context ){
+            Console.WriteLine( "\nCLIENTES" );
+            Console.WriteLine( "No\tId\t\tNombre\tEmail\tTelefono" );
+            var clientes = context.Clientes.ToList();
+            foreach (var cliente in clientes) {
+                Console.WriteLine( $"{cliente.toString()}" );
+            }
+        }
+    }
+    ```
+
+    ```csharp    
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    namespace VentasCore;
+
+    public class Producto
+    {
+        [Key]
+        public long id { get; set; }
+        public string nombre { get; set; }
+        public string descripcion { get; set; }
+        public decimal precio { get; set; }
+
+        public string toString(){
+            return $"{id}\t{nombre}\t{descripcion}\t{precio}";
+        }
+
+        public void leer(){
+            Console.WriteLine("INGRESE PRODUCTO:");
+            Console.Write("Nombre:");
+            nombre = Console.ReadLine();
+            Console.Write("Descripcion:");
+            descripcion = Console.ReadLine();
+            Console.Write("Precio:");
+            precio = decimal.Parse(Console.ReadLine());
+        }
+
+        public static void registrarProducto( ApplicationDbContext context ){
+            Producto p1 = new Producto();
+            p1.leer();
+            context.Productos.Add( p1 );
+            context.SaveChanges();
+        }
+
+        public static void mostrarProductos( ApplicationDbContext context ){
+            Console.WriteLine( "\nPRODUCTOS" );
+            Console.WriteLine( "No\tId\t\tNombre\tDescripcion\tPrecio" );
+            var productos = context.Productos.ToList();
+            foreach (var producto in productos) {
+                Console.WriteLine( $"{producto.toString()}" );
+            }
+        }
+    }
+    ```
+
+    ```csharp    
+    using System;
+    using System.ComponentModel.DataAnnotations;
+
+    namespace VentasCore;
+    public class CompraProducto
+    {
+        [Key]
+        public long id { get; set; }
+        public Producto producto { get; set; }
+        public int cantidad { get; set; }
+
+        public decimal costoCompra(){
+            return producto.precio * cantidad;
+        }
+
+        public string toString(){
+            return $"{id} \t{producto.nombre} \t{producto.precio} \t{cantidad} \t{costoCompra()}";
+        }
+    }
+    ```
+
+    ```csharp    
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using Microsoft.EntityFrameworkCore;
+
+    namespace VentasCore;
+    public class Venta
+    {
+        [Key]
+        public long id { get; set; }
+        public Cliente cliente { get; set; }
+        public List<CompraProducto> compraProductos { get; set; }
+        public DateTime fechaVenta { get; set; }
+
+        public static void compraVenta(ApplicationDbContext context){
+            Console.WriteLine("\nCOMPRA VENTA");
+            Cliente.mostrarClientes(context);
+            Console.Write("Seleccione el 'id cliente ' que Comprara: ");
+            long noCliente = long.Parse( Console.ReadLine() ) ;
+            //Cliente cliente = context.Clientes.FirstOrDefault( x => x.id==noCliente );
+            Cliente cliente = context.Clientes.Where( x => x.id==noCliente ).FirstOrDefault();
+
+            List<CompraProducto> compraProductos = new List<CompraProducto>();
+
+            while (true)
+            {
+                Console.WriteLine("\n\nMENU \n Seleccione una opción:");
+                Console.WriteLine("1. Agregar Producto a Comprar");
+                Console.WriteLine("0. Compra Completada");
+
+                int opcion;
+                if (int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            Console.WriteLine("\nCOMPRA VENTA");
+                            Producto.mostrarProductos( context );
+                            Console.Write("Seleccione el 'id producto' a Comprar:");
+                            long noProducto = long.Parse( Console.ReadLine() ) ;
+                            Producto producto = context.Productos.FirstOrDefault( x => x.id==noProducto );
+                            Console.Write("Ingrese Cantidad a Comprar:");
+                            int cantidad = int.Parse( Console.ReadLine() ) ;
+
+                            CompraProducto cp = new CompraProducto{
+                                producto=producto , 
+                                cantidad=cantidad
+                            };
+                            compraProductos.Add( cp );
+                            break;
+                        //case 0:
+                        //    return; // Salir del programa
+                        default:
+                            Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                }
+                if(opcion==0){
+                    break;
+                }
+            }
+
+            foreach (var cps in compraProductos) {
+                context.CompraProductos.Add(cps);
+                context.SaveChanges();
+            }
+
+            Venta venta = new Venta{
+                cliente=cliente,
+                compraProductos=compraProductos,
+                fechaVenta=DateTime.Now
+            };
+            context.Ventas.Add(venta);
+            context.SaveChanges();
+        }
+
+        public static void mostrarVentas(ApplicationDbContext context){
+            Console.WriteLine( "\nTODAS LAS VENTAS" );
+            var ventas = context.Ventas.Where(v => true).Include(v => v.cliente).Include(v => v.compraProductos  ).ToList();
+            
+            foreach (var venta in ventas) {
+                Cliente cliente = venta.cliente;
+                Console.WriteLine($"Cliente: {cliente.nombre}");
+                Console.WriteLine($"Productos Comprados:");
+                List<CompraProducto> compraProductos = venta.compraProductos;
+                
+                decimal total = 0;
+                foreach (var compraProducto in compraProductos)
+                {
+                    var cp = context.CompraProductos.Where(x => x.id == compraProducto.id ).Include(x=>x.producto).FirstOrDefault();
+                    Console.WriteLine($"\t {compraProducto.toString()}");
+                    total = total + compraProducto.costoCompra();
+                }
+                Console.WriteLine($"Total Compra: {total}");
+            }
+        }
+    }
+    ```
+
+**Paso 2: Actualizar el Contexto de Entity Framework**
+
+1. En la clase `ApplicationDbContext` Agregar los modelos para que sea mapeados por EntityFramework.
+
+   ```csharp
+    using Microsoft.EntityFrameworkCore;
+
+    namespace VentasCore;
+    public class ApplicationDbContext : DbContext{
+        public DbSet<Cliente> Clientes {get; set;}
+        public DbSet<Producto> Productos {get; set;}
+        public DbSet<CompraProducto> CompraProductos {get; set;}
+        public DbSet<Venta> Ventas {get; set;}
+
+        protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder ){
+            if( !optionsBuilder.IsConfigured ){
+                optionsBuilder.UseSqlServer("Server=LAPTOP-A7F9UEK5\\SQLEXPRESS; Database=AppConVentasEFBiblioteca; Integrated Security=True; Encrypt=false;");
+            }
+        }
+    }
+   ```
+
+   Asegúrate de agregar las propiedades `DbSet` para cada uno de tus modelos.
+
+**Paso 3: Generar las Migraciones**
+
+1. Abre una terminal en la ubicación de tu proyecto y ejecuta el siguiente comando para generar una migración inicial:
+
+   ```bash
+   dotnet ef migrations add AgregarTablas
+   ```
+
+   Esto generará una migración inicial basada en tus modelos.
+
+**Paso 4: Aplicar las Migraciones a la Base de Datos**
+
+1. Ejecuta el siguiente comando para aplicar las migraciones a la base de datos:
+
+   ```bash
+   dotnet ef database update
+   ```
+
+   Esto creará la base de datos según las migraciones que hayas definido.
+   ![Alt text](image-17.png)
+
+
+**Paso 5: Compilar la biblioteca de clases**
+
+1. En la terminal, navega al directorio de la biblioteca de clases.
+
+2. Ejecuta el siguiente comando para compilar la biblioteca de clases:
+
+   ```shell
+   dotnet build
+   ```
+
+   Esto compilará la biblioteca y generará el ensamblado (archivo DLL) en el directorio de salida.
+
+**Paso 6: Volver al proyecto "VentasConsole"**
+
+
+**Paso 4: Utilizar clases de la biblioteca**
+
+1. En la clase `Program.cs` ahora podemos usar la biblioteca de clases y la implementacion del menu completo.
+
+   ```csharp
+   using VentasCore;
+
+    public class Program{
+        public static void Main(string[] args){
+            using var context = new ApplicationDbContext();
+            
+            while (true)
+            {
+                Console.WriteLine("\n\nMENU \n Seleccione una opción:");
+                Console.WriteLine("1. Registrar Cliente");
+                Console.WriteLine("2. Mostrar Clientes");
+                Console.WriteLine("3. Registrar Producto");
+                Console.WriteLine("4. Mostrar Productos");
+                Console.WriteLine("5. Realizar Compra/Venta");
+                Console.WriteLine("6. Mostrar Ventas");
+                Console.WriteLine("0. Salir");
+
+                int opcion;
+                if (int.TryParse(Console.ReadLine(), out opcion))
+                {
+                    switch (opcion)
+                    {
+                        case 1:
+                            Cliente.registrarCliente(context);
+                            break;
+                        case 2:
+                            Cliente.mostrarClientes(context);
+                            break;
+                        case 3:
+                            Producto.registrarProducto( context );
+                            break;
+                        case 4:
+                            Producto.mostrarProductos(context);
+                            break;
+                        case 5:
+                            Venta.compraVenta(context);
+                            break;
+                        case 6:
+                            Venta.mostrarVentas(context);
+                            break;
+                        case 0:
+                            return; // Salir del programa
+                        default:
+                            Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                            break;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opción no válida. Inténtelo de nuevo.");
+                }
+            }
+        }    
+    }
+   ```
+
+**Paso 5: Ejecuta la Aplicación de Consola**
+
+1. Ahora puedes compilar y ejecutar la aplicación de consola utilizando el siguiente comando:
+
+    ```bash
+    dotnet run
+    ```
+2. ahora podra realizar todas las operaciones.
+
 
 # ----------------------------------------------
 
